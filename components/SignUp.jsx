@@ -1,5 +1,5 @@
-import { addDoc, collection } from "firebase/firestore";
-import { useState } from "react";
+import { addDoc, collection, getDocs } from "firebase/firestore";
+import { useEffect, useState } from "react";
 import { db } from "./Firebase";
 
 const SignUp = () => {
@@ -12,15 +12,30 @@ const SignUp = () => {
     category: "",
   };
   const [studentData, setStudentData] = useState(initialState);
+  const [list, setList] = useState([]);
 
   const onSubmitHandler = async (e) => {
     e.preventDefault();
     if (studentData.firstName && studentData.email) {
       const docRef = await addDoc(collection(db, "student-data"), studentData);
-      console.log(db, "docref");
+      // const newdata = {
+      //   id: docRef.id,
+      //   ...studentData,
+      // };
+      // setList([newdata, ...list]);
       setStudentData(initialState);
     }
   };
+  // const citiesRef = collection(db, "student-data");
+  // console.log(citiesRef, "citiesRef");
+  useEffect(() => {
+    async function getStoredData() {
+      const querySnapshot = await getDocs(collection(db, "student-data"));
+      const newDataArray = querySnapshot.docs.map((doc) => ({ ...doc.data() }));
+      console.log(newDataArray, "newarray");
+    }
+    getStoredData();
+  }, []);
 
   return (
     <div className="h-screen flex flex-col justify-center items-center max-w-[700px] mx-auto">
