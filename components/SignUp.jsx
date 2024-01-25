@@ -1,5 +1,6 @@
 import { addDoc, collection } from "firebase/firestore";
 import { useState } from "react";
+import { db } from "./Firebase";
 
 const SignUp = () => {
   const initialState = {
@@ -17,6 +18,7 @@ const SignUp = () => {
     if (studentData.firstName && studentData.email) {
       const docRef = await addDoc(collection(db, "student-data"), studentData);
       console.log(db, "docref");
+      setStudentData(initialState);
     }
   };
 
@@ -54,6 +56,7 @@ const SignUp = () => {
           name=""
           id=""
           placeholder="Email"
+          value={studentData.email}
         />
         <input
           onChange={(e) =>
@@ -85,10 +88,13 @@ const SignUp = () => {
           name=""
           id=""
         >
-          <option>Frontend</option>
-          <option>Backend</option>
-          <option>UI/UX</option>
-          <option>Wordpress</option>
+          <option selected disabled>
+            Choose category
+          </option>
+          <option value="Frontend">Frontend</option>
+          <option value="Backend">Backend</option>
+          <option value="UI/UX">UI/UX</option>
+          <option value="Wordpress">Wordpress</option>
         </select>
         <div className="text-center">
           <button className="bg-purple-700 text-white py-2 px-10 hover:bg-purple-500 transition-all duration-200 ease-in-out rounded-lg mt-4 text-lg">
